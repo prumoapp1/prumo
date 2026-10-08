@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prumo — agenda, tarefas, gastos e hábitos num app só para Windows</title>
+<meta name="description" content="Prumo é um app para PC com Windows 10 e 11 que junta agenda, tarefas, gastos e hábitos numa tela só. Pagamento único de R$ 19,95, sem mensalidade. Seus dados ficam no seu computador.">
+<meta property="og:title" content="Prumo — seu dia inteiro num app só">
+<meta property="og:description" content="Agenda, tarefas, gastos e hábitos no seu PC com Windows. R$ 19,95 uma vez, sem mensalidade.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0b0a; --bg2:#141210; --card:#1b1815; --line:#2b2621;
+    --text:#f3eee7; --muted:#a69d92; --amber:#f2a93b; --amber2:#ffcf7a; --red:#e5574b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+  h1,h2,h3{font-family:Sora,Inter,sans-serif;line-height:1.15;letter-spacing:-.02em}
+  h1{font-size:clamp(2.2rem,5.5vw,3.6rem);font-weight:800}
+  h2{font-size:clamp(1.6rem,3.6vw,2.3rem);font-weight:700;margin-bottom:14px}
+  h3{font-size:1.1rem;font-weight:700;margin-bottom:6px}
+  .hl{color:var(--amber)}
+  .muted{color:var(--muted)}
+
+  /* topo */
+  header{border-bottom:1px solid var(--line)}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:Sora,Inter,system-ui,sans-serif;font-weight:700;font-size:1.15rem;text-decoration:none}
+  .logo i{display:grid;grid-template-columns:1fr 1fr;gap:3px;width:26px;height:26px}
+  .logo i b{border-radius:4px;background:#3a342d}
+  .logo i b:first-child{background:var(--amber)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--amber);color:#1a1205;
+       font-weight:600;text-decoration:none;border-radius:12px;padding:15px 26px;font-size:1.05rem;transition:transform .15s,background .15s}
+  .btn:hover{background:var(--amber2);transform:translateY(-1px)}
+  .btn.sm{padding:9px 16px;font-size:.92rem;border-radius:10px}
+
+  /* hero */
+  .hero{padding:72px 0 56px;display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center}
+  .tag{display:inline-block;font-size:.85rem;color:var(--amber2);border:1px solid #4a3a20;background:#1f1810;border-radius:99px;padding:5px 12px;margin-bottom:20px}
+  .hero p.lead{font-size:1.15rem;color:var(--muted);margin:18px 0 28px;max-width:34ch}
+  .price{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:22px}
+  .price strong{white-space:nowrap;font-family:Sora,Inter,system-ui,sans-serif;font-size:2.2rem}
+  .price span{color:var(--muted)}
+  .fine{font-size:.88rem;color:var(--muted);margin-top:14px}
+
+  /* mock do app (ilustração) */
+  .mock{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 30px 80px -30px rgba(242,169,59,.25)}
+  .mock .bar{display:flex;gap:6px;margin-bottom:14px}
+  .mock .bar i{width:10px;height:10px;border-radius:50%;background:#3a342d}
+  .mock .hi{font-family:Sora,Inter,system-ui,sans-serif;font-weight:700;margin-bottom:12px}
+  .grid4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .tile{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:.82rem}
+  .tile h4{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;font-weight:600}
+  .row{display:flex;justify-content:space-between;gap:8px;padding:3px 0}
+  .chk{display:flex;gap:7px;align-items:center;padding:3px 0}
+  .chk i{width:12px;height:12px;border-radius:3px;border:1.5px solid #5a5148;flex:none}
+  .chk.ok i{background:var(--amber);border-color:var(--amber)}
+  .chk.ok span{text-decoration:line-through;color:var(--muted)}
+  .dots{display:flex;gap:5px;margin-top:4px}
+  .dots i{width:14px;height:14px;border-radius:4px;background:#2e2924}
+  .dots i.on{background:var(--amber)}
+  .neg{color:var(--red)}
+  .cap{font-size:.75rem;color:var(--muted);text-align:center;margin-top:10px}
+
+  section{padding:64px 0;border-top:1px solid var(--line)}
+  .center{text-align:center;max-width:640px;margin:0 auto 36px}
+
+  /* dor */
+  .apps{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:22px}
+  .apps span{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:.95rem}
+  .apps span s{color:var(--muted)}
+
+  .feats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .feat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .feat .ic{width:36px;height:36px;border-radius:10px;background:#2a2016;color:var(--amber);display:grid;place-items:center;font-size:1.1rem;margin-bottom:14px}
+  .feat p{color:var(--muted);font-size:.95rem}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px}
+  .box ul{list-style:none;margin-top:12px}
+  .box li{padding:7px 0 7px 26px;position:relative;color:var(--muted)}
+  .box li::before{content:"✓";position:absolute;left:0;color:var(--amber);font-weight:700}
+  .box.vs li::before{content:"✕";color:var(--red)}
+
+  /* faq */
+  details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:10px}
+  summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+  summary::after{content:"+";color:var(--amber);font-size:1.3rem;line-height:1}
+  details[open] summary::after{content:"–"}
+  details p{color:var(--muted);margin-top:10px}
+  .faq{max-width:720px;margin:0 auto}
+
+  .final{text-align:center}
+  .final .btn{margin-top:8px}
+
+  footer{border-top:1px solid var(--line);padding:32px 0 48px;font-size:.88rem;color:var(--muted)}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
+  footer a{color:var(--muted)}
+
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr;padding-top:44px;gap:36px}
+    .feats{grid-template-columns:1fr 1fr}
+    .two{grid-template-columns:1fr}
+  }
+  @media (max-width:520px){
+    .feats{grid-template-columns:1fr}
+    .btn{width:100%}
+    header .btn{width:auto}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#"><i><b></b><b></b><b></b><b></b></i>Prumo</a>
+    <a class="btn sm comprar" href="https://pay.kiwify.com.br/cXeGGCF">Comprar · R$ 19,95</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <span class="tag">App para PC com Windows 10 e 11</span>
+      <h1>Cansado de abrir <span class="hl">4 apps</span> por dia?</h1>
+      <p class="lead">O Prumo junta agenda, tarefas, gastos e hábitos numa tela só, direto no seu computador.</p>
+      <div class="price"><strong>R$ 19,95</strong><span>pagamento único · sem mensalidade</span></div>
+      <a class="btn comprar" href="https://pay.kiwify.com.br/cXeGGCF">Quero o Prumo →</a>
+      <p class="fine">Pix, boleto ou cartão · download na hora · 7 dias para pedir reembolso</p>
+    </div>
+
+    <div>
+      <div class="mock" aria-label="Ilustração da tela inicial do Prumo">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="hi">Bom dia, Fulano</div>
+        <div class="grid4">
+          <div class="tile"><h4>Agenda</h4>
+            <div class="row"><span>09:00</span><span>Reunião</span></div>
+            <div class="row"><span>14:30</span><span>Dentista</span></div>
+            <div class="row"><span>19:00</span><span>Academia</span></div>
+          </div>
+          <div class="tile"><h4>Tarefas</h4>
+            <div class="chk ok"><i></i><span>Pagar fatura</span></div>
+            <div class="chk"><i></i><span>Enviar relatório</span></div>
+            <div class="chk"><i></i><span>Comprar café</span></div>
+          </div>
+          <div class="tile"><h4>Gastos do mês</h4>
+            <div class="row"><span>Mercado</span><span class="neg">−312,40</span></div>
+            <div class="row"><span>Luz</span><span class="neg">−89,90</span></div>
+            <div class="row"><span>Saldo</span><b>1.240,00</b></div>
+          </div>
+          <div class="tile"><h4>Hábitos</h4>
+            <div>Beber água</div>
+            <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i></div>
+            <div style="margin-top:6px">Ler 10 min</div>
+            <div class="dots"><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+          </div>
+        </div>
+      </div>
+      <p class="cap">Ilustração com dados de exemplo</p>
+    </div>
+  </div>
+</main>
+
+<section>
+  <div class="wrap">
+    <div class="center">
+      <h2>Um app no lugar de quatro</h2>
+      <p class="muted">Calendário num app, gastos numa planilha, tarefas num bloco de notas, hábitos em lugar nenhum. O Prumo põe tudo na mesma tela.</p>
+    </div>
+    <div class="apps">
+      <span><s>calendário</s></span><span><s>planilha de gastos</s></span><span><s>lista de tarefas</s></span><span><s>app de hábitos</s></span>
+      <span style="border-color:var(--amber);color:var(--amber2)">→ Prumo</span>
+    </div>
+    <div class="feats">
+      <div class="feat"><div class="ic">◷</div><h3>Agenda</h3><p>Compromissos do dia e da semana logo na abertura.</p></div>
+      <div class="feat"><div class="ic">✓</div><h3>Tarefas</h3><p>Risque o que fez e veja o que falta, sem trocar de janela.</p></div>
+      <div class="feat"><div class="ic">R$</div><h3>Gastos</h3><p>Lance um gasto e o saldo do mês se atualiza na hora.</p></div>
+      <div class="feat"><div class="ic">◆</div><h3>Hábitos e metas</h3><p>Marque o hábito do dia e acompanhe a sequência.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap two">
+    <div class="box">
+      <h3>Seus dados ficam no seu PC</h3>
+      <p class="muted">Sem conta em servidor e sem nuvem.</p>
+      <ul>
+        <li>Dados criptografados (AES-256) e protegidos pela sua senha</li>
+        <li>Funciona sem internet; só clima e notícias usam conexão</li>
+        <li>Sem anúncios e sem rastreadores dentro do app</li>
+        <li>Cópia de segurança diária no próprio computador</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Paga uma vez, usa sempre</h3>
+      <p class="muted">R$ 19,95 uma única vez, em vez de uma assinatura por mês.</p>
+      <ul>
+        <li>Sem mensalidade</li>
+        <li>Sem renovação automática</li>
+        <li>Sem plano "premium" escondido</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="center"><h2>Perguntas frequentes</h2></div>
+    <div class="faq">
+      <details><summary>Como recebo o app depois de pagar?</summary>
+        <p>O pagamento é processado pela Kiwify. Assim que for aprovado (Pix e cartão costumam ser na hora), você recebe por e-mail o acesso ao instalador, com um passo a passo e um vídeo mostrando a instalação.</p></details>
+      <details><summary>Funciona no meu computador?</summary>
+        <p>Funciona em PC com Windows 10 ou 11. Não funciona em Mac, celular ou tablet.</p></details>
+      <details><summary>Preciso de internet?</summary>
+        <p>Não para usar agenda, tarefas, gastos e hábitos. A internet só é usada para a previsão do tempo e as notícias, se você quiser vê-las.</p></details>
+      <details><summary>E se eu não gostar?</summary>
+        <p>Você tem 7 dias após a compra para pedir reembolso pela própria Kiwify, como prevê o Código de Defesa do Consumidor para compras pela internet.</p></details>
+      <details><summary>Tem mensalidade ou cobrança depois?</summary>
+        <p>Não. São R$ 19,95 uma única vez.</p></details>
+      <details><summary>Se eu esquecer a senha, perco tudo?</summary>
+        <p>Ao criar a conta, o Prumo mostra um código de recuperação. Com ele você redefine a senha. Guarde esse código fora do computador.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2>Seu dia inteiro numa tela só</h2>
+    <p class="muted" style="margin-bottom:22px">R$ 19,95 · pagamento único · Windows 10 e 11</p>
+    <a class="btn comprar" href="https://pay.kiwify.com.br/cXeGGCF">Comprar o Prumo →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>Prumo · vendido por Erik Cardoso Raulino · pagamento processado pela Kiwify</div>
+    <div><a href="../">Política de privacidade</a> · <a href="mailto:testesgeral001@gmail.com">testesgeral001@gmail.com</a></div>
+  </div>
+</footer>
+
+<script>
+  // Repassa utm_* e src da URL desta página para o checkout da Kiwify,
+  // para saber de qual anúncio ou vídeo veio cada venda.
+  (function(){
+    try{
+      var p = new URLSearchParams(location.search), out = new URLSearchParams();
+      p.forEach(function(v,k){ if(/^utm_|^src$|^sck$/.test(k)) out.set(k,v); });
+      var q = out.toString(); if(!q) return;
+      document.querySelectorAll('a.comprar').forEach(function(a){
+        a.href = a.href + (a.href.indexOf('?')>-1 ? '&' : '?') + q;
+      });
+    }catch(e){}
+  })();
+</script>
+</body>
+</html>
