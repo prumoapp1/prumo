@@ -4,247 +4,515 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Prumo para Windows</title>
-<meta name="description" content="Agenda, tarefas, gastos e metas num app só para PC com Windows 10 e 11. R$ 19,95, pagamento único, sem mensalidade.">
+<meta name="description" content="Agenda, tarefas, gastos, metas e hábitos num app só para PC com Windows 10 e 11. R$ 19,95, pagamento único, sem mensalidade.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Prumo — seu dia inteiro num app só">
+<meta property="og:title" content="Prumo: seu dia inteiro num app só, no seu PC">
 <meta property="og:description" content="Agenda, tarefas, gastos e metas no seu PC com Windows. R$ 19,95 uma vez, sem mensalidade.">
 <meta property="og:image" content="https://prumoapp1.github.io/prumo/comprar/img/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#17130F">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: uma tela só. Esquerda = promessa, preço e botão; direita = janela do app com abas que trocam sozinhas, e um "extrato" comparando assinatura x pagamento único. */
+/*
+  Página longa de vendas do Prumo.
+  Seções alternam carvão (#17130F) e papel (#F3EEE7). Âmbar só em botões, preço e no fio de prumo.
+  O fio de prumo (linha fina com um peso) acompanha a rolagem no desktop: é a marca da página.
+*/
 :root{
-  --bg:#ffffff;          /* branco, como o checkout da Kiwify */
-  --bg-2:#f6f7f5;        /* superfícies */
-  --line:#e3e6e1;        /* bordas */
-  --fg:#15181c;          /* texto */
-  --muted:#5f6670;       /* texto secundário */
-  --amber:#0b9b55;       /* verde dos botões e destaques */
-  --amber-deep:#077a42;
-  --on-accent:#ffffff;   /* texto sobre o verde */
-  --soft:#e8f6ee;        /* verde bem claro */
-  --paper:#fffdf7;       /* papel do extrato */
-  --ink:#15181c;
+  --char:#17130F; --char-2:#211B15; --char-3:#2C251D;
+  --paper:#F3EEE7; --paper-2:#E8E0D4; --card:#FFFDF9;
+  --ink:#1D1813;
+  --on-dark:#F3EEE7; --muted-dark:#B3A898;
+  --muted-light:#655B50;
+  --amber:#F2A93B; --amber-hover:#F7BA5C; --amber-text:#8A5208;
+  --brick:#B4441B;
+  --line-dark:rgba(243,238,231,.12); --line-light:rgba(29,24,19,.12);
   --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
   --f-body:"Figtree","Segoe UI",system-ui,sans-serif;
-  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
-  color-scheme:light;
+  --wrap:1120px;
+  --gutter:clamp(16px,4vw,40px);
+  color-scheme:dark light;
 }
 *{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;overflow:hidden}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--char);color:var(--on-dark);font-family:var(--f-body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img{max-width:100%;height:auto;display:block}
 a{color:inherit}
-.page{height:100%;overflow:clip;display:flex;flex-direction:column;padding-inline:clamp(16px,3.5vw,48px);padding-block:clamp(12px,2.2vh,24px);gap:clamp(10px,2vh,22px);position:relative;isolation:isolate}
-.page::before{content:"";position:absolute;inset:-20% -10% auto auto;width:70vw;height:70vw;max-width:900px;max-height:900px;background:radial-gradient(closest-side,rgba(11,155,85,.10),transparent 70%);z-index:-1;pointer-events:none}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px;border-radius:6px}
 
-/* topo */
-.top{display:flex;align-items:center;gap:12px}
-.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:800;font-size:20px;text-decoration:none}
-.brand img{width:30px;height:30px;border-radius:8px}
-.top .sp{flex:1}
-.ghost{font:600 14px var(--f-body);color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer}
-.ghost:hover{border-color:var(--muted)}
-.mini{font:700 14px var(--f-body);color:var(--on-accent);background:var(--amber);border-radius:999px;padding:8px 14px;text-decoration:none}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--gutter)}
+.dark{background:var(--char);color:var(--on-dark)}
+.light{background:var(--paper);color:var(--ink)}
+section{padding-block:clamp(64px,10vw,120px)}
 
-/* conteúdo */
-.main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(20px,4vw,64px);align-items:center}
-.pitch{min-width:0;display:flex;flex-direction:column;gap:clamp(12px,2.4vh,24px)}
-.head{display:flex;flex-direction:column;gap:clamp(8px,1.6vh,16px)}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font:600 12px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--amber)}
-.eyebrow i{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 4px var(--soft)}
-h1{margin:0;font-family:var(--f-display);font-weight:800;font-size:clamp(30px,4.6vw,64px);line-height:.98;letter-spacing:-.025em;text-wrap:balance}
-h1 em{font-style:normal;color:var(--amber)}
-.sub{margin:0;color:var(--muted);font-size:clamp(15px,1.25vw,18px);max-width:46ch}
-.sub b{color:var(--fg);font-weight:600}
-.gains{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;max-width:560px}
-.gains li{display:flex;gap:9px;align-items:flex-start;font-size:14.5px;line-height:1.3}
-.gains svg{flex:none;margin-top:1px}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.025em}
+h1{font-weight:800;font-size:clamp(38px,5.6vw,72px);line-height:.98}
+h2{font-weight:800;font-size:clamp(30px,4vw,50px);line-height:1.02;max-width:20ch}
+h3{font-weight:700;font-size:clamp(20px,1.8vw,24px);line-height:1.15}
+p{margin:0}
+.lead{font-size:clamp(17px,1.5vw,20px);max-width:56ch}
+.dark .lead,.dark .soft{color:var(--muted-dark)}
+.light .lead,.light .soft{color:var(--muted-light)}
+.stack{display:flex;flex-direction:column;gap:20px}
 
-.buy{display:flex;flex-direction:column;gap:10px;max-width:560px}
-.price{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-.price strong{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,3.6vw,52px);letter-spacing:-.02em;line-height:1}
-.price strong small{font-size:.5em;vertical-align:.55em;margin-right:2px}
-.price span{font:700 13px var(--f-body);color:var(--amber-deep);background:var(--soft);border-radius:6px;padding:4px 8px;text-transform:uppercase;letter-spacing:.06em}
-.cta{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:12px;min-height:64px;padding:16px 26px;border-radius:16px;background:var(--amber);color:var(--on-accent);text-decoration:none;font:800 clamp(18px,1.5vw,21px) var(--f-display);letter-spacing:-.01em;box-shadow:0 10px 26px -10px rgba(11,155,85,.6),inset 0 -3px 0 var(--amber-deep);transition:transform .15s ease,box-shadow .15s ease}
-.cta:hover{transform:translateY(-2px);box-shadow:0 16px 34px -10px rgba(11,155,85,.75),inset 0 -3px 0 var(--amber-deep)}
-.cta:active{transform:translateY(1px)}
-.cta:focus-visible,.ghost:focus-visible,.tab:focus-visible,.mini:focus-visible{outline:3px solid var(--fg);outline-offset:3px}
-.cta::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);animation:brilho 3.6s ease-in-out 1.2s infinite}
-@keyframes brilho{0%{left:-60%}35%,100%{left:130%}}
-.cta .arrow{display:inline-block;transition:transform .2s}
-.cta:hover .arrow{transform:translateX(4px)}
-.trust{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0;padding:0;list-style:none;font-size:13px;color:var(--muted)}
-.trust li{display:flex;align-items:center;gap:6px}
-.trust svg{color:var(--amber)}
-.celular{display:none;font-size:13px;color:var(--muted);margin:0}
-.pcbtn{display:none;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:12px 18px;border-radius:14px;border:2px solid var(--amber);background:var(--bg);color:var(--amber-deep);font:700 16px var(--f-display);cursor:pointer;width:100%}
-.pcbtn:hover{background:var(--soft)}
-.pcbtn:focus-visible,.sheet button:focus-visible,.sheet a:focus-visible{outline:3px solid var(--fg);outline-offset:3px}
-.sheet{position:fixed;inset:0;z-index:30;display:flex;align-items:flex-end;justify-content:center;background:rgba(20,24,28,.45)}
-.sheet[hidden]{display:none!important}
-.sheet .box{width:min(480px,100%);background:var(--bg);border-radius:20px 20px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:10px;animation:sobe .22s ease}
-@keyframes sobe{from{transform:translateY(24px);opacity:0}}
-.sheet h2{margin:0;font:800 22px var(--f-display);line-height:1.15}
-.sheet p{margin:0 0 4px;color:var(--muted);font-size:14.5px}
-.sheet .op{display:flex;align-items:center;gap:12px;min-height:54px;padding:12px 16px;border-radius:14px;border:1px solid var(--line);background:var(--bg-2);color:var(--fg);font:600 16px var(--f-body);text-decoration:none;cursor:pointer;width:100%;text-align:left}
-.sheet .op:hover{border-color:var(--amber)}
-.sheet .op.wa{background:var(--amber);border-color:var(--amber);color:var(--on-accent);font-weight:700}
-.sheet .op svg{flex:none}
-.sheet .fechar{align-self:center;background:none;border:0;color:var(--muted);font:600 14px var(--f-body);padding:8px 12px;cursor:pointer}
-.sheet .ok{min-height:18px;font-size:13px;color:var(--amber-deep);font-weight:600}
+/* botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:60px;padding:16px 30px;border-radius:14px;background:var(--amber);color:var(--ink);font:800 clamp(17px,1.4vw,19px)/1.1 var(--f-display);letter-spacing:-.01em;text-decoration:none;border:0;cursor:pointer;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18);transition:background-color .15s ease,transform .15s ease}
+.btn:hover{background:var(--amber-hover)}
+.btn:active{transform:translateY(1px)}
+.btn-row{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.trust{display:flex;flex-wrap:wrap;gap:6px 18px;list-style:none;margin:0;padding:0;font-size:14px}
+.dark .trust{color:var(--muted-dark)}
+.light .trust{color:var(--muted-light)}
+.trust li{display:flex;align-items:center;gap:7px}
+.trust svg{flex:none}
 
-/* janela do app */
-.stage{min-width:0;position:relative}
-.win{background:var(--bg);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 30px 70px -30px rgba(20,30,25,.35);display:flex;flex-direction:column;min-height:0}
-.bar{display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px solid var(--line)}
-.bar i{width:10px;height:10px;border-radius:50%;background:#d6dad4}
-.bar span{margin-left:8px;font:500 12px var(--f-mono);color:var(--muted)}
-.tabs{display:flex;gap:4px;padding:8px;border-bottom:1px solid var(--line);overflow-x:auto}
-.tab{flex:1;white-space:nowrap;font:600 14px var(--f-body);color:var(--muted);background:transparent;border:0;border-radius:8px;padding:8px 10px;cursor:pointer;position:relative}
-.tab[aria-selected="true"]{color:var(--amber-deep);background:var(--soft)}
-.tab .fill{position:absolute;left:10px;right:10px;bottom:3px;height:2px;border-radius:2px;background:var(--amber);transform-origin:left;transform:scaleX(0)}
-.tab[aria-selected="true"] .fill{animation:enche var(--ciclo,4.5s) linear forwards}
-.paused .tab .fill{animation:none;transform:scaleX(0)}
+/* lista com visto */
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.checks li{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start}
+.checks li::before{content:"";width:22px;height:22px;margin-top:2px;border-radius:50%;background:var(--amber) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231D1813' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4L18 8'/%3E%3C/svg%3E") center/14px no-repeat}
+.xs{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.xs li{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start}
+.xs li::before{content:"";width:22px;height:22px;margin-top:2px;border-radius:50%;border:2px solid var(--brick);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B4441B' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M8 8l8 8M16 8l-8 8'/%3E%3C/svg%3E") center/12px no-repeat}
+
+/* faixa e topo */
+.faixa{background:var(--amber);color:var(--ink);text-align:center;font:600 14px/1.3 var(--f-body);padding:9px var(--gutter)}
+.topo{position:sticky;top:0;z-index:20;background:rgba(23,19,15,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line-dark)}
+.topo .wrap{display:flex;align-items:center;gap:16px;min-height:60px}
+.marca{display:flex;align-items:center;gap:10px;font:800 21px var(--f-display);text-decoration:none;letter-spacing:-.02em}
+.marca img{width:30px;height:30px;border-radius:8px}
+.topo .sp{flex:1}
+.topo nav a{font-size:15px;color:var(--muted-dark);text-decoration:none}
+.topo nav a:hover{color:var(--on-dark)}
+.topo .btn{min-height:42px;padding:10px 18px;font-size:15px;border-radius:10px}
+
+/* fio de prumo (desktop) */
+.fio{position:fixed;top:0;bottom:0;left:max(14px,calc((100vw - var(--wrap)) / 2 - 22px));width:1px;background:linear-gradient(to bottom,rgba(242,169,59,0),rgba(242,169,59,.45) 12%,rgba(242,169,59,.45) 88%,rgba(242,169,59,0));z-index:10;pointer-events:none}
+.fio .peso{position:absolute;left:-6px;top:0;width:13px;height:20px;transform:translateY(var(--y,120px))}
+.fio .peso svg{display:block}
+@media (max-width:1240px){.fio{display:none}}
+
+/* hero */
+.hero{padding-block:clamp(40px,7vw,96px) clamp(56px,8vw,110px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(28px,5vw,72px);align-items:center}
+.hero .stack{gap:26px}
+.hero .lead{max-width:44ch}
+.hero .checks{font-size:16.5px}
+.celular{display:none;font-size:14.5px;color:var(--muted-dark);max-width:44ch}
+.pcbtn{display:none;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:12px 18px;border-radius:14px;border:2px solid var(--amber);background:transparent;color:var(--amber);font:700 16px var(--f-display);cursor:pointer;width:100%}
+
+/* notebook com telas reais */
+.palco{position:relative;padding:6% 4% 9%}
+.palco .atras{position:absolute;width:46%;border-radius:10px;overflow:hidden;border:1px solid var(--line-dark);box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
+.palco .atras.a{top:0;right:-2%;transform:rotate(4deg)}
+.palco .atras.b{bottom:2%;left:-3%;transform:rotate(-5deg)}
+.notebook{position:relative;z-index:1}
+.notebook .tela{background:#0c0a08;border:10px solid #2C251D;border-bottom-width:14px;border-radius:16px 16px 4px 4px;box-shadow:0 40px 80px -30px rgba(0,0,0,.85)}
+.notebook .tela img{aspect-ratio:2300/1428;width:100%;border-radius:4px}
+.notebook .base{height:16px;margin-inline:-7%;background:linear-gradient(#3a3128,#231d17);border-radius:0 0 14px 14px;position:relative}
+.notebook .base::after{content:"";position:absolute;left:50%;top:0;width:16%;height:6px;transform:translateX(-50%);background:#1a1511;border-radius:0 0 8px 8px}
+
+/* telas (abas) */
+.telas .wrap{display:grid;gap:40px}
+.telas header{display:grid;gap:14px}
+.janela{background:var(--card);border:1px solid var(--line-light);border-radius:16px;overflow:hidden;box-shadow:0 30px 70px -40px rgba(29,24,19,.45)}
+.abas{display:flex;gap:4px;padding:8px;border-bottom:1px solid var(--line-light);overflow-x:auto}
+.aba{flex:1;white-space:nowrap;font:600 15px var(--f-body);color:var(--muted-light);background:transparent;border:0;border-radius:10px;padding:10px 12px;cursor:pointer;position:relative}
+.aba[aria-selected="true"]{color:var(--ink);background:var(--paper-2)}
+.aba .enche{position:absolute;left:12px;right:12px;bottom:4px;height:2px;border-radius:2px;background:var(--amber);transform-origin:left;transform:scaleX(0)}
+.aba[aria-selected="true"] .enche{animation:enche 4.8s linear forwards}
+.parado .aba .enche{animation:none;transform:scaleX(0)}
 @keyframes enche{to{transform:scaleX(1)}}
-.shot{position:relative;aspect-ratio:1200/745;background:#f3f3f1}
-.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;opacity:0;transition:opacity .45s ease}
-.shot img.on{opacity:1}
-.cap{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--line);font-size:14px;min-height:44px;background:var(--bg-2)}
-.cap b{font-weight:700;color:var(--amber);font-family:var(--f-mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.foto{position:relative;aspect-ratio:2300/1428;background:var(--paper-2)}
+.foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;opacity:0;transition:opacity .45s ease}
+.foto img.on{opacity:1}
+.legenda{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;padding:14px 18px;border-top:1px solid var(--line-light);font-size:16px}
+.legenda b{font-family:var(--f-display);font-weight:700}
+.legenda .nota{margin-left:auto;font-size:13px;color:var(--muted-light)}
 
-/* extrato */
-.cap{flex-wrap:wrap;row-gap:6px}
-.recibo{margin-left:auto;display:flex;align-items:center;flex-wrap:wrap;gap:2px 12px;font:600 12px var(--f-mono);color:var(--muted)}
-.recibo .x{text-decoration:line-through;opacity:.6}
-.recibo .tot{color:var(--fg);font-weight:700}
-.recibo .ex{font:400 11px var(--f-body);opacity:.75}
+/* dor: as peças espalhadas */
+.dor .wrap,.causa .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:clamp(32px,6vw,80px);align-items:center}
+.pecas{position:relative;min-height:340px}
+.peca{position:absolute;display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:14px;font:600 16px/1.2 var(--f-body);white-space:nowrap;box-shadow:0 18px 40px -18px rgba(0,0,0,.6)}
+.peca small{display:block;font-weight:500;font-size:13px;opacity:.7;margin-top:3px}
+.peca i{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-style:normal}
+.dor .peca{background:var(--char-3);color:var(--on-dark);border:1px solid var(--line-dark)}
+.dor .peca i{background:rgba(243,238,231,.08)}
+.dor .p1{top:2%;left:4%;transform:rotate(-7deg)}
+.dor .p2{top:26%;right:0;transform:rotate(5deg)}
+.dor .p3{top:52%;left:0;transform:rotate(3deg)}
+.dor .p4{bottom:2%;right:8%;transform:rotate(-4deg);border-style:dashed;opacity:.8}
+.dor .fim{margin-top:6px;padding-left:18px;border-left:3px solid var(--brick);font-size:18px;color:var(--on-dark);max-width:44ch}
 
-.foot{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11.5px;color:var(--muted)}
-.foot a{color:var(--muted)}
+/* causa: as mesmas peças alinhadas no fio */
+.alinhado{position:relative;display:grid;gap:12px;padding-left:34px}
+.alinhado::before{content:"";position:absolute;left:10px;top:-14px;bottom:-14px;width:1px;background:var(--amber-text);opacity:.5}
+.alinhado .peca{position:relative;white-space:normal;background:var(--card);color:var(--ink);border:1px solid var(--line-light);box-shadow:0 14px 30px -20px rgba(29,24,19,.5)}
+.alinhado .peca::before{content:"";position:absolute;left:-28px;top:50%;width:9px;height:9px;margin-top:-4px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 3px var(--paper)}
+.alinhado .peca i{background:var(--paper-2)}
+.alinhado .peca .ok{margin-left:auto;font:700 13px var(--f-body);color:var(--amber-text);padding-left:12px;white-space:nowrap}
+.causa .nota-forte{padding:20px 22px;border-radius:14px;background:var(--card);border:1px solid var(--line-light);font-size:18px;max-width:52ch}
+
+/* passos */
+.passos .wrap{display:grid;gap:44px}
+.lista-passos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.4vw,28px);counter-reset:p}
+.lista-passos li{counter-increment:p;padding:28px 26px 30px;border-radius:18px;background:var(--char-2);border:1px solid var(--line-dark);display:grid;gap:12px;align-content:start}
+.lista-passos li::before{content:counter(p);font:800 64px/1 var(--f-display);color:var(--amber);letter-spacing:-.04em}
+.lista-passos p{color:var(--muted-dark)}
+
+/* pra quem é */
+.pra-quem .wrap{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,6vw,80px);align-items:start}
+.pra-quem .checks{font-size:18px}
+.nao{margin-top:28px;padding-top:20px;border-top:1px solid var(--line-light);color:var(--muted-light);font-size:16px}
+
+/* oferta */
+.oferta .wrap{display:grid;gap:36px;justify-items:center;text-align:center}
+.oferta h2{max-width:22ch}
+.caixa{width:min(760px,100%);text-align:left;background:var(--char-2);border:1px solid rgba(242,169,59,.35);border-radius:22px;padding:clamp(24px,4vw,44px);display:grid;gap:28px}
+.caixa .checks{grid-template-columns:1fr 1fr;gap:14px 28px;font-size:16.5px}
+.conta{display:grid;gap:10px;padding:18px 20px;border-radius:14px;background:var(--char);border:1px solid var(--line-dark);font-size:15.5px}
+.conta .linha{display:flex;justify-content:space-between;gap:16px;color:var(--muted-dark)}
+.conta .linha s{opacity:.8;white-space:nowrap}
+.conta .linha.nossa{color:var(--on-dark);font-weight:700}
+.conta small{color:var(--muted-dark);font-size:13px}
+.preco{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.preco strong{font:800 clamp(56px,7vw,84px)/1 var(--f-display);letter-spacing:-.04em;color:var(--amber)}
+.preco strong small{font-size:.38em;vertical-align:.95em;margin-right:4px;letter-spacing:0}
+.preco span{color:var(--muted-dark);font-size:16px}
+.caixa .btn{width:100%;min-height:66px;font-size:20px}
+
+/* garantia + quem faz */
+.garantia .wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,3vw,32px)}
+.bloco{background:var(--card);border:1px solid var(--line-light);border-radius:20px;padding:clamp(24px,3.4vw,40px);display:grid;gap:14px;align-content:start}
+.selo{width:64px;height:64px}
+.bloco p{color:var(--muted-light)}
+
+/* custo */
+.custo .wrap{display:grid;gap:24px}
+.custo .numeros{display:flex;flex-wrap:wrap;gap:14px 40px;margin-top:8px}
+.custo .numeros div{display:grid;gap:4px}
+.custo .numeros b{font:800 clamp(34px,4vw,48px)/1 var(--f-display);letter-spacing:-.03em}
+.custo .numeros .r{color:var(--amber)}
+.custo .numeros span{color:var(--muted-dark);font-size:15px}
 
 /* dúvidas */
-.drawer{position:fixed;inset:0;z-index:20;display:flex;justify-content:flex-end;background:rgba(20,24,28,.4)}
-.drawer[hidden]{display:none!important}
-.panel{width:min(460px,100%);height:100%;background:var(--bg);border-left:1px solid var(--line);padding:calc(20px + env(safe-area-inset-top,0px)) 22px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;display:flex;flex-direction:column;gap:12px;animation:entra .25s ease}
-@keyframes entra{from{transform:translateX(30px);opacity:0}}
-.panel header{display:flex;align-items:center;justify-content:space-between}
-.panel h2{margin:0;font:800 24px var(--f-display)}
-details{border-bottom:1px solid var(--line);padding:10px 0}
-summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:10px}
-summary::after{content:"+";color:var(--amber);font-weight:700}
-details[open] summary::after{content:"–"}
-details p{margin:8px 0 0;color:var(--muted);font-size:14.5px}
-.panel .cta{margin-top:8px}
+.duvidas .wrap{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:clamp(28px,5vw,64px);align-items:start}
+.faq{display:grid;gap:10px}
+.faq details{background:var(--card);border:1px solid var(--line-light);border-radius:14px;padding:0 20px}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:60px;font:700 17px/1.3 var(--f-display);letter-spacing:-.01em}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";flex:none;width:12px;height:12px;border-right:2.5px solid var(--amber-text);border-bottom:2.5px solid var(--amber-text);transform:rotate(45deg) translate(-3px,-3px);transition:transform .2s ease}
+.faq details[open] summary::after{transform:rotate(225deg) translate(-2px,-2px)}
+.faq details p{padding:0 0 18px;color:var(--muted-light);max-width:64ch}
+
+/* rodapé */
+.rodape{padding-block:40px;font-size:14px;color:var(--muted-dark);border-top:1px solid var(--line-dark)}
+.rodape .wrap{display:flex;flex-wrap:wrap;gap:8px 24px}
+.rodape a{color:var(--muted-dark)}
+
+/* barra fixa no celular */
+.barra{position:fixed;left:0;right:0;bottom:0;z-index:25;display:none;gap:12px;align-items:center;padding:10px var(--gutter) calc(10px + env(safe-area-inset-bottom,0px));background:rgba(23,19,15,.96);border-top:1px solid var(--line-dark);transform:translateY(110%);transition:transform .25s ease}
+.barra.on{transform:none}
+.barra .p{font:800 22px/1 var(--f-display);color:var(--amber);white-space:nowrap}
+.barra .p small{display:block;font:500 12px var(--f-body);color:var(--muted-dark);margin-top:3px}
+.barra .btn{flex:1;min-height:52px;font-size:17px}
+
+/* mandar pro PC */
+.sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(10,8,6,.6)}
+.sheet[hidden]{display:none!important}
+.sheet .box{width:min(480px,100%);background:var(--paper);color:var(--ink);border-radius:20px 20px 0 0;padding:22px 20px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:10px;animation:sobe .22s ease}
+@keyframes sobe{from{transform:translateY(24px);opacity:0}}
+.sheet h2{font-size:24px}
+.sheet p{color:var(--muted-light);font-size:15px;margin-bottom:4px}
+.sheet .op{display:flex;align-items:center;gap:12px;min-height:54px;padding:12px 16px;border-radius:14px;border:1px solid var(--line-light);background:var(--card);color:var(--ink);font:600 16px var(--f-body);text-decoration:none;cursor:pointer;width:100%;text-align:left}
+.sheet .op.wa{background:var(--amber);border-color:var(--amber);font-weight:700}
+.sheet .fechar{align-self:center;background:none;border:0;color:var(--muted-light);font:600 15px var(--f-body);padding:10px 14px;cursor:pointer}
+.sheet .ok{min-height:18px;font-size:14px;color:var(--amber-text);font-weight:600}
+
+/* entrada do topo (um único momento animado) */
+@media (prefers-reduced-motion:no-preference){
+  .hero .stack>*{animation:surge .6s cubic-bezier(.2,.7,.2,1) both}
+  .hero .stack>*:nth-child(2){animation-delay:.08s}
+  .hero .stack>*:nth-child(3){animation-delay:.16s}
+  .hero .stack>*:nth-child(4){animation-delay:.24s}
+  .palco{animation:surge .8s cubic-bezier(.2,.7,.2,1) .2s both}
+  @keyframes surge{from{opacity:0;transform:translateY(14px)}}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 
 /* telas médias */
-@media (max-width:1100px){.gains{grid-template-columns:1fr}.recibo{font-size:11px}}
-/* celular e telas estreitas: empilha */
-@media (max-width:820px){
-  body{overflow:auto}
-  .page{min-height:100%;height:auto}
-  .main{grid-template-columns:1fr;align-items:start;gap:14px}
-  .pitch{display:contents}
-  .head{order:1;display:flex;flex-direction:column;gap:8px}
-  .stage{order:2;height:auto;max-height:none}
-  .buy{order:3;max-width:none}
-  .gains,.sub{display:none}
-  .shot{aspect-ratio:1200/745;flex:none}
-  .recibo .ex{display:none}
+@media (max-width:980px){
+  .hero .wrap,.dor .wrap,.causa .wrap,.pra-quem .wrap,.duvidas .wrap{grid-template-columns:minmax(0,1fr)}
+  .palco{max-width:640px;margin-inline:auto;width:100%}
+  .lista-passos{grid-template-columns:1fr}
+  .garantia .wrap{grid-template-columns:1fr}
+  .causa .alinhado{order:2}
+}
+/* celular */
+@media (max-width:640px){
+  body{font-size:16.5px}
+  .topo nav{display:none}
+  .caixa .checks{grid-template-columns:1fr}
   .celular{display:block}
   .pcbtn{display:flex}
-  .mini{display:none}
-  .stage{margin-top:4px}
-  .tab{font-size:13px;padding:7px 6px}
+  .barra{display:flex}
+  .rodape{padding-bottom:110px}
+  .palco{overflow:hidden;padding:8% 6% 10%}
+  .btn-row .btn{width:100%}
+  .pecas{min-height:300px}
+  .peca{font-size:15px;padding:12px 14px}
+  .dor .p2{right:-2%}
+  .legenda .nota{margin-left:0}
+  .caixa .btn{font-size:17px;padding-inline:16px}
 }
-@media (max-width:820px) and (max-height:700px){.eyebrow,.cap,.foot span+span{display:none}.cta{min-height:56px}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 
+<div class="faixa">R$ 19,95 uma vez. Sem mensalidade e sem renovação automática.</div>
 
-<div class="page" id="topo">
-  <header class="top">
-    <a class="brand" href="#topo"><img src="img/icone.png" alt="">Prumo</a>
+<header class="topo">
+  <div class="wrap">
+    <a class="marca" href="#inicio"><img src="img/icone.png" alt="">Prumo</a>
     <span class="sp"></span>
-    <button class="ghost" type="button" id="abrir-duvidas">Dúvidas</button>
-    <a class="mini comprar" href="https://pay.kiwify.com.br/cXeGGCF">Comprar</a>
-  </header>
-
-  <main class="main">
-    <section class="pitch">
-      <div class="head">
-        <span class="eyebrow"><i></i>App para PC com Windows 10 e 11</span>
-        <h1>Seu dia inteiro num app só. <em>Paga uma vez.</em></h1>
-        <p class="sub">Agenda, tarefas, gastos e metas na mesma tela, direto no seu computador. <b>Sem mensalidade e sem nuvem.</b></p>
-      </div>
-
-      <ul class="gains">
-        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0b9b55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Lançou o gasto, o saldo do mês muda na hora</li>
-        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0b9b55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Tarefa atrasada fica em destaque até você resolver</li>
-        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0b9b55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Veja quanto falta pra cada meta</li>
-        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0b9b55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Funciona sem internet, dados protegidos por senha</li>
-      </ul>
-
-      <div class="buy">
-        <div class="price"><strong><small>R$</small>19,95</strong><span>pagamento único</span></div>
-        <a class="cta comprar" href="https://pay.kiwify.com.br/cXeGGCF">Quero o Prumo agora <span class="arrow" aria-hidden="true">→</span></a>
-        <ul class="trust">
-          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg>Pix, cartão ou boleto</li>
-          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg>Download na hora</li>
-          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/></svg>7 dias pra pedir reembolso</li>
-        </ul>
-        <p class="celular">O Prumo roda no PC com Windows. Pague agora e receba o instalador por e-mail, ou mande o link pro seu PC.</p>
-        <button class="pcbtn" type="button" id="abrir-pc"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Mandar o link pro meu PC</button>
-      </div>
-    </section>
-
-    <section class="stage" aria-label="Telas do app">
-      <div class="win" id="janela">
-        <div class="bar"><i></i><i></i><i></i><span>Prumo</span></div>
-        <div class="tabs" role="tablist">
-          <button class="tab" role="tab" type="button" aria-selected="true" data-i="0">Gastos<span class="fill"></span></button>
-          <button class="tab" role="tab" type="button" aria-selected="false" data-i="1">Tarefas<span class="fill"></span></button>
-          <button class="tab" role="tab" type="button" aria-selected="false" data-i="2">Metas<span class="fill"></span></button>
-          <button class="tab" role="tab" type="button" aria-selected="false" data-i="3">Hábitos<span class="fill"></span></button>
-        </div>
-        <div class="shot">
-          <img class="on" src="img/tela-gastos.webp" alt="Tela de finanças do Prumo com saldo do mês, entradas, saídas e gastos por categoria" width="2300" height="1428">
-          <img src="img/tela-tarefas.webp" alt="Tela de tarefas do Prumo com uma tarefa atrasada em destaque" width="2300" height="1428" loading="lazy">
-          <img src="img/tela-metas.webp" alt="Tela de metas do Prumo com o progresso de cada meta" width="2300" height="1428" loading="lazy">
-          <img src="img/tela-habitos.webp" alt="Tela de hábitos do Prumo com os hábitos do dia" width="2300" height="1428" loading="lazy">
-        </div>
-        <div class="cap"><b id="cap-k">Gastos</b><span id="cap-t">Lançou, o saldo do mês já mudou. Sem fórmula.</span><span class="recibo" aria-label="Comparação de preço em 12 meses"><span>em 12 meses</span><span>assinatura <span class="x">R$ 118,80</span></span><span class="tot">Prumo R$ 19,95</span><span class="ex">exemplo: app de R$ 9,90/mês</span></span></div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="foot">
-    <span>Vendido por Erik Cardoso Raulino · pagamento pela Kiwify</span>
-    <span>Telas reais do app com dados de exemplo</span>
-    <a href="../">Política de privacidade</a>
-  </footer>
-</div>
-
-<div class="drawer" id="duvidas" hidden>
-  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="titulo-duvidas">
-    <header><h2 id="titulo-duvidas">Dúvidas</h2><button class="ghost" type="button" id="fechar-duvidas">Fechar</button></header>
-    <details open><summary>Como recebo o app depois de pagar?</summary><p>O pagamento é feito pela Kiwify. Assim que for aprovado (Pix e cartão costumam ser na hora), você recebe por e-mail o acesso ao instalador, com um passo a passo e um vídeo mostrando a instalação.</p></details>
-    <details><summary>Estou no celular. Posso comprar mesmo assim?</summary><p>Pode. Você paga pelo celular e recebe por e-mail o acesso ao instalador. Depois é só abrir esse e-mail no PC com Windows e instalar.</p></details>
-    <details><summary>Funciona no meu computador?</summary><p>Funciona em PC com Windows 10 ou 11. Não funciona em Mac, celular ou tablet.</p></details>
-    <details><summary>Precisa de internet?</summary><p>Não para usar agenda, tarefas, gastos e metas. A internet só é usada para a previsão do tempo e as notícias, se você quiser vê-las.</p></details>
-    <details><summary>Tem mensalidade ou cobrança depois?</summary><p>Não. São R$ 19,95 uma única vez. Sem renovação automática e sem plano premium escondido.</p></details>
-    <details><summary>Onde ficam meus dados?</summary><p>No seu PC. Sem conta em servidor e sem nuvem. Os dados são criptografados (AES-256) e protegidos pela sua senha, com cópia de segurança diária no próprio computador.</p></details>
-    <details><summary>E se eu não gostar?</summary><p>Você tem 7 dias após a compra para pedir reembolso pela própria Kiwify, como prevê o Código de Defesa do Consumidor para compras pela internet.</p></details>
-    <details><summary>Se eu esquecer a senha, perco tudo?</summary><p>Ao criar a conta, o Prumo mostra um código de recuperação. Com ele você redefine a senha. Guarde esse código fora do computador.</p></details>
-    <a class="cta comprar" href="https://pay.kiwify.com.br/cXeGGCF">Quero o Prumo por R$ 19,95 <span class="arrow" aria-hidden="true">→</span></a>
+    <nav><a href="#duvidas">Dúvidas</a></nav>
+    <a class="btn comprar" href="https://pay.kiwify.com.br/cXeGGCF">Comprar</a>
   </div>
+</header>
+
+<div class="fio" aria-hidden="true"><div class="peso"><svg width="13" height="20" viewBox="0 0 13 20"><path d="M6.5 0v5" stroke="#F2A93B" stroke-width="1"/><path d="M6.5 5 L12 12 L6.5 20 L1 12 Z" fill="#F2A93B"/></svg></div></div>
+
+<main id="inicio">
+
+  <!-- 1. topo -->
+  <section class="hero dark">
+    <div class="wrap">
+      <div class="stack">
+        <h1>Seu dia inteiro num app só, direto no seu PC.</h1>
+        <p class="lead">O Prumo junta agenda, tarefas, gastos, metas e hábitos numa tela do Windows. Você paga R$ 19,95 uma vez e usa sem internet e sem nuvem.</p>
+        <ul class="checks">
+          <li>Lançou o gasto, o saldo do mês muda na hora</li>
+          <li>O que atrasou fica em destaque até você resolver</li>
+          <li>Você vê quanto falta pra cada meta</li>
+          <li>Seus dados ficam no seu PC, protegidos por senha</li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn comprar" href="https://pay.kiwify.com.br/cXeGGCF">Comprar o Prumo por R$ 19,95</a>
+          <ul class="trust">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg>Pix, cartão ou boleto</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg>Instalador por e-mail após o pagamento</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/></svg>7 dias pra pedir reembolso</li>
+          </ul>
+          <p class="celular">Está no celular? O Prumo roda no PC com Windows 10 e 11. Pague agora e instale depois pelo e-mail, ou mande este link pro seu computador.</p>
+          <button class="pcbtn" type="button" data-abre-pc><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Mandar o link pro meu PC</button>
+        </div>
+      </div>
+
+      <div class="palco" aria-label="Telas reais do Prumo">
+        <div class="atras a"><img src="img/tela-metas.webp" alt="" width="2300" height="1428"></div>
+        <div class="atras b"><img src="img/tela-tarefas.webp" alt="" width="2300" height="1428"></div>
+        <div class="notebook">
+          <div class="tela"><img src="img/tela-gastos.webp" alt="Tela de gastos do Prumo com saldo do mês, entradas, saídas e gastos por categoria" width="2300" height="1428"></div>
+          <div class="base"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. telas reais -->
+  <section class="telas light">
+    <div class="wrap">
+      <header>
+        <h2>Veja o Prumo por dentro</h2>
+        <p class="lead">Cada parte do seu dia tem uma aba. Clique para ver.</p>
+      </header>
+      <div class="janela" id="janela">
+        <div class="abas" role="tablist" aria-label="Partes do app">
+          <button class="aba" role="tab" type="button" aria-selected="true" data-i="0">Gastos<span class="enche"></span></button>
+          <button class="aba" role="tab" type="button" aria-selected="false" data-i="1">Tarefas<span class="enche"></span></button>
+          <button class="aba" role="tab" type="button" aria-selected="false" data-i="2">Metas<span class="enche"></span></button>
+          <button class="aba" role="tab" type="button" aria-selected="false" data-i="3">Hábitos<span class="enche"></span></button>
+        </div>
+        <div class="foto">
+          <img class="on" src="img/tela-gastos.webp" alt="Tela de gastos com saldo do mês e gastos por categoria" width="2300" height="1428">
+          <img src="img/tela-tarefas.webp" alt="Tela de tarefas com uma tarefa atrasada em destaque" width="2300" height="1428" loading="lazy">
+          <img src="img/tela-metas.webp" alt="Tela de metas com o progresso de cada meta" width="2300" height="1428" loading="lazy">
+          <img src="img/tela-habitos.webp" alt="Tela de hábitos com os hábitos do dia" width="2300" height="1428" loading="lazy">
+        </div>
+        <div class="legenda"><b id="leg-k">Gastos</b><span id="leg-t">Lançou, o saldo do mês já mudou. Sem fórmula.</span><span class="nota">Telas reais do app, com dados de exemplo</span></div>
+      </div>
+      <div class="btn-row"><a class="btn comprar" href="https://pay.kiwify.com.br/cXeGGCF">Quero o Prumo no meu PC</a></div>
+    </div>
+  </section>
+
+  <!-- 3. dor -->
+  <section class="dor dark">
+    <div class="wrap">
+      <div class="stack">
+        <h2>Você se organiza, se organiza, e no dia 12 o salário já sumiu?</h2>
+        <p class="lead">Agenda no celular. Tarefas num caderno. Gastos numa planilha com sete abas. Metas em lugar nenhum. Cada coisa num canto, e nenhum desses lugares conversa com o outro.</p>
+        <p class="fim">No fim do dia fica a sensação de ter corrido o tempo todo sem sair do lugar.</p>
+      </div>
+      <div class="pecas" aria-hidden="true">
+        <div class="peca p1"><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></i><div>Agenda<small>no celular</small></div></div>
+        <div class="peca p2"><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.5 1.5L7.5 5M3.5 12l1.5 1.5L7.5 11"/><circle cx="5" cy="18" r="1.2"/></svg></i><div>Tarefas<small>num caderno</small></div></div>
+        <div class="peca p3"><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></i><div>Gastos<small>planilha_FINAL_v2.xlsx</small></div></div>
+        <div class="peca p4"><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></i><div>Metas<small>em lugar nenhum</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. causa -->
+  <section class="causa light">
+    <div class="wrap">
+      <div class="stack">
+        <h2>O problema não é falta de disciplina. É a vida espalhada em quatro lugares.</h2>
+        <ul class="xs">
+          <li>Você esquece a conta porque o lembrete estava em outro app</li>
+          <li>Não sabe quanto ainda pode gastar até o fim do mês</li>
+          <li>A meta fica parada porque você nem lembra dela</li>
+          <li>Planejar a semana demora mais do que fazer o que estava planejado</li>
+        </ul>
+        <p class="nota-forte">Quando tudo fica na mesma tela, você abre o PC e já sabe o que fazer hoje, quanto tem e quanto falta.</p>
+        <div class="btn-row"><a class="btn comprar" href="https://pay.kiwify.com.br/cXeGGCF">Quero organizar meu mês</a></div>
+      </div>
+      <div class="alinhado" aria-label="As mesmas quatro partes, juntas no Prumo">
+        <div class="peca"><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></i><div>Agenda<small>compromissos do dia e da semana</small></div><span class="ok">no Prumo</span></div>
+        <div class="peca"><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.5 1.5L7.5 5M3.5 12l1.5 1.5L7.5 11"/><circle cx="5" cy="18" r="1.2"/></svg></i><div>Tarefas<small>o atrasado fica em destaque</small></div><span class="ok">no Prumo</span></div>
+        <div class="peca"><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></i><div>Gastos<small>saldo do mês na hora</small></div><span class="ok">no Prumo</span></div>
+        <div class="peca"><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></i><div>Metas<small>quanto falta pra cada uma</small></div><span class="ok">no Prumo</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. como funciona -->
+  <section class="passos dark">
+    <div class="wrap">
+      <h2>Como funciona</h2>
+      <ol class="lista-passos">
+        <li><h3>Compre e instale</h3><p>Depois do pagamento, você recebe por e-mail o instalador, com um vídeo mostrando cada passo da instalação.</p></li>
+        <li><h3>Coloque o que já existe</h3><p>Seus compromissos, tarefas, gastos e metas. Sem fórmula e sem montar planilha.</p></li>
+        <li><h3>Abra e siga o dia</h3><p>Cada parte tem sua aba. O que atrasou fica em destaque até você resolver, e o saldo do mês está sempre à vista.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 6. pra quem é -->
+  <section class="pra-quem light">
+    <div class="wrap">
+      <div class="stack">
+        <h2>O Prumo é pra você que:</h2>
+        <div class="btn-row"><a class="btn comprar" href="https://pay.kiwify.com.br/cXeGGCF">Comprar o Prumo</a></div>
+      </div>
+      <div>
+        <ul class="checks">
+          <li>trabalha ou estuda o dia todo e sente que a rotina não cabe no dia</li>
+          <li>já tentou planilha, caderno e aplicativo, e largou todos</li>
+          <li>quer saber pra onde vai o dinheiro sem montar fórmula</li>
+          <li>tem uma meta, como uma viagem ou uma reserva, que não sai do lugar</li>
+          <li>prefere pagar uma vez a ter mais uma assinatura</li>
+        </ul>
+        <p class="nao">Não é pra você se usa só Mac ou só celular. O Prumo roda no PC com Windows 10 e 11.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. oferta -->
+  <section class="oferta dark" id="oferta">
+    <div class="wrap">
+      <h2>Tudo o que vem no Prumo</h2>
+      <div class="caixa">
+        <ul class="checks">
+          <li>Agenda com seus compromissos</li>
+          <li>Tarefas com destaque para o que atrasou</li>
+          <li>Gastos com o saldo do mês na hora</li>
+          <li>Metas com aportes e quanto falta</li>
+          <li>Hábitos do dia com sequência</li>
+          <li>Funciona sem internet, com dados criptografados no seu PC</li>
+        </ul>
+        <div class="conta" aria-label="Comparação de preço em 12 meses">
+          <div class="linha"><span>App de tarefas por assinatura, R$ 9,90 por mês, em 12 meses</span><s>R$ 118,80</s></div>
+          <div class="linha nossa"><span>Prumo, uma vez</span><span>R$ 19,95</span></div>
+          <small>Exemplo de comparação. O valor de outros apps varia.</small>
+        </div>
+        <div class="preco"><strong><small>R$</small>19,95</strong><span>pagamento único, sem mensalidade</span></div>
+        <a class="btn comprar" href="https://pay.kiwify.com.br/cXeGGCF">Comprar o Prumo por R$ 19,95</a>
+        <ul class="trust">
+          <li>Pagamento pela Kiwify</li>
+          <li>Pix, cartão ou boleto</li>
+          <li>Acesso enviado por e-mail</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. garantia + quem faz -->
+  <section class="garantia light">
+    <div class="wrap">
+      <div class="bloco">
+        <svg class="selo" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#F2A93B"/><path d="M32 14l14 5v10c0 9-6 15-14 18-8-3-14-9-14-18V19z" fill="none" stroke="#1D1813" stroke-width="3" stroke-linejoin="round"/><path d="M25 31l5 5 9-10" fill="none" stroke="#1D1813" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>7 dias pra testar</h2>
+        <p>Se o Prumo não servir pra você, peça o reembolso em até 7 dias pela própria Kiwify. O valor volta inteiro, sem precisar explicar o motivo.</p>
+      </div>
+      <div class="bloco">
+        <img src="img/icone.png" alt="" width="64" height="64" style="width:64px;height:64px;border-radius:16px">
+        <h2>Quem faz o Prumo</h2>
+        <p>O Prumo é feito por Erik Cardoso Raulino, em Florianópolis. Não tem empresa grande por trás: se algo der errado, responda o e-mail da compra e você fala direto comigo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. custo -->
+  <section class="custo dark">
+    <div class="wrap">
+      <h2>Quanto custa continuar desorganizado?</h2>
+      <p class="lead">Uma fatura de R$ 1.000 paga com atraso já gera R$ 20 só de multa, fora os juros. Uma assinatura esquecida custa todo mês. O Prumo custa menos que uma dessas, e uma vez só.</p>
+      <div class="numeros">
+        <div><b>R$ 20</b><span>multa de 2% numa conta de R$ 1.000 atrasada</span></div>
+        <div><b class="r">R$ 19,95</b><span>o Prumo, pra sempre</span></div>
+      </div>
+      <div class="btn-row"><a class="btn comprar" href="https://pay.kiwify.com.br/cXeGGCF">Quero o Prumo agora</a></div>
+    </div>
+  </section>
+
+  <!-- 10. dúvidas -->
+  <section class="duvidas light" id="duvidas">
+    <div class="wrap">
+      <div class="stack">
+        <h2>Perguntas frequentes</h2>
+        <p class="soft">Não achou sua dúvida? Depois da compra, responda o e-mail da Kiwify.</p>
+      </div>
+      <div class="faq">
+        <details open><summary>Como recebo o app depois de pagar?</summary><p>O pagamento é feito pela Kiwify. Assim que for aprovado (Pix e cartão costumam ser na hora), você recebe por e-mail o acesso ao instalador, com um passo a passo e um vídeo mostrando a instalação.</p></details>
+        <details><summary>Estou no celular. Posso comprar mesmo assim?</summary><p>Pode. Você paga pelo celular e recebe por e-mail o acesso ao instalador. Depois é só abrir esse e-mail no PC com Windows e instalar.</p></details>
+        <details><summary>Funciona no meu computador?</summary><p>Funciona em PC com Windows 10 ou 11. Não funciona em Mac, celular ou tablet.</p></details>
+        <details><summary>Precisa de internet?</summary><p>Não para usar agenda, tarefas, gastos e metas. A internet só é usada para a previsão do tempo e as notícias, se você quiser vê-las.</p></details>
+        <details><summary>Tem mensalidade ou cobrança depois?</summary><p>Não. São R$ 19,95 uma única vez. Sem renovação automática e sem plano premium escondido.</p></details>
+        <details><summary>Onde ficam meus dados?</summary><p>No seu PC. Sem conta em servidor e sem nuvem. Os dados são criptografados (AES-256) e protegidos pela sua senha, com cópia de segurança diária no próprio computador.</p></details>
+        <details><summary>E se eu não gostar?</summary><p>Você tem 7 dias após a compra para pedir reembolso pela própria Kiwify, como prevê o Código de Defesa do Consumidor para compras pela internet.</p></details>
+        <details><summary>Se eu esquecer a senha, perco tudo?</summary><p>Ao criar a conta, o Prumo mostra um código de recuperação. Com ele você redefine a senha. Guarde esse código fora do computador.</p></details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="rodape">
+  <div class="wrap">
+    <span>Vendido por Erik Cardoso Raulino. Pagamento pela Kiwify.</span>
+    <span>Telas reais do app com dados de exemplo.</span>
+    <a href="../">Política de privacidade</a>
+  </div>
+</footer>
+
+<div class="barra" id="barra" aria-hidden="true">
+  <div class="p">R$ 19,95<small>uma vez</small></div>
+  <a class="btn comprar" href="https://pay.kiwify.com.br/cXeGGCF" tabindex="-1">Comprar o Prumo</a>
 </div>
 
 <div class="sheet" id="pc-sheet" hidden>
@@ -270,40 +538,56 @@ details p{margin:8px 0 0;color:var(--muted);font-size:14.5px}
   }catch(e){}
 })();
 
-// Abas que trocam sozinhas; param quando a pessoa clica em uma.
+// Abas das telas: trocam sozinhas e param quando a pessoa clica.
 (function(){
-  var CICLO=4500;
-  var tabs=[].slice.call(document.querySelectorAll('.tab'));
-  var imgs=[].slice.call(document.querySelectorAll('.shot img'));
-  var k=document.getElementById('cap-k'),t=document.getElementById('cap-t'),win=document.getElementById('janela');
+  var CICLO=4800;
+  var abas=[].slice.call(document.querySelectorAll('.aba'));
+  var imgs=[].slice.call(document.querySelectorAll('.foto img'));
+  var k=document.getElementById('leg-k'),t=document.getElementById('leg-t'),win=document.getElementById('janela');
   var textos=[['Gastos','Lançou, o saldo do mês já mudou. Sem fórmula.'],['Tarefas','O que atrasou fica em destaque até você resolver.'],['Metas','Aporte na meta e veja o progresso subir.'],['Hábitos','Marque o hábito do dia e mantenha a sequência.']];
   var atual=0,timer=null;
-  win.style.setProperty('--ciclo',CICLO+'ms');
   function mostra(i){
     atual=i;
-    tabs.forEach(function(b,j){b.setAttribute('aria-selected',j===i?'true':'false');var f=b.querySelector('.fill');f.style.animation='none';f.offsetWidth;f.style.animation='';});
+    abas.forEach(function(b,j){b.setAttribute('aria-selected',j===i?'true':'false');var f=b.querySelector('.enche');f.style.animation='none';f.offsetWidth;f.style.animation='';});
     imgs.forEach(function(im,j){im.classList.toggle('on',j===i);});
     k.textContent=textos[i][0];t.textContent=textos[i][1];
   }
-  function roda(){timer=setInterval(function(){mostra((atual+1)%tabs.length);},CICLO);}
-  tabs.forEach(function(b,i){b.addEventListener('click',function(){clearInterval(timer);win.classList.add('paused');mostra(i);});});
-  if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))roda();else win.classList.add('paused');
+  function roda(){timer=setInterval(function(){mostra((atual+1)%abas.length);},CICLO);}
+  abas.forEach(function(b,i){b.addEventListener('click',function(){clearInterval(timer);win.classList.add('parado');mostra(i);});});
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){win.classList.add('parado');}else{roda();}
 })();
 
-// Painel de dúvidas.
+// Fio de prumo: o peso desce conforme a rolagem.
 (function(){
-  var d=document.getElementById('duvidas'),ab=document.getElementById('abrir-duvidas'),fe=document.getElementById('fechar-duvidas');
-  function abre(){d.hidden=false;fe.focus();}
-  function fecha(){d.hidden=true;ab.focus();}
-  ab.addEventListener('click',abre);fe.addEventListener('click',fecha);
-  d.addEventListener('click',function(e){if(e.target===d)fecha();});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!d.hidden)fecha();});
+  var fio=document.querySelector('.fio');if(!fio)return;
+  var peso=fio.querySelector('.peso'),pend=false;
+  function atualiza(){
+    pend=false;
+    var max=document.documentElement.scrollHeight-innerHeight;
+    var p=max>0?scrollY/max:0;
+    var y=90+p*(innerHeight-140);
+    peso.style.setProperty('--y',y+'px');
+  }
+  addEventListener('scroll',function(){if(!pend){pend=true;requestAnimationFrame(atualiza);}},{passive:true});
+  addEventListener('resize',atualiza);atualiza();
+})();
+
+// Barra fixa no celular: aparece depois do topo.
+(function(){
+  var barra=document.getElementById('barra'),hero=document.querySelector('.hero');
+  if(!barra||!hero||!('IntersectionObserver' in window))return;
+  new IntersectionObserver(function(e){
+    var mostrar=!e[0].isIntersecting;
+    barra.classList.toggle('on',mostrar);
+    barra.setAttribute('aria-hidden',mostrar?'false':'true');
+    barra.querySelector('a').tabIndex=mostrar?0:-1;
+  },{threshold:0}).observe(hero);
 })();
 
 // Mandar o link da página pro PC (WhatsApp, e-mail ou copiar). O link leva src=celular pra Kiwify mostrar de onde veio.
 (function(){
-  var sh=document.getElementById('pc-sheet'),ab=document.getElementById('abrir-pc'),ok=document.getElementById('pc-ok');
-  if(!sh||!ab)return;
+  var sh=document.getElementById('pc-sheet'),ok=document.getElementById('pc-ok'),ultimo=null;
+  if(!sh)return;
   function link(){
     var base=location.origin+location.pathname,out=new URLSearchParams();
     try{new URLSearchParams(location.search).forEach(function(v,k){if(/^utm_/.test(k))out.set(k,v);});}catch(e){}
@@ -311,14 +595,14 @@ details p{margin:8px 0 0;color:var(--muted);font-size:14.5px}
     return base+'?'+out.toString();
   }
   function texto(u){return 'Prumo: agenda, tarefas, gastos e metas num app só pro PC com Windows. R$ 19,95, pagamento único, sem mensalidade. Abra no computador: '+u;}
-  function abre(){
-    var u=link();
+  function abre(e){
+    ultimo=e.currentTarget;var u=link();
     document.getElementById('pc-wa').href='https://wa.me/?text='+encodeURIComponent(texto(u));
     document.getElementById('pc-mail').href='mailto:?subject='+encodeURIComponent('Prumo: link pra abrir no PC')+'&body='+encodeURIComponent(texto(u));
     ok.textContent='';sh.hidden=false;document.getElementById('pc-fechar').focus();
   }
-  function fecha(){sh.hidden=true;ab.focus();}
-  ab.addEventListener('click',abre);
+  function fecha(){sh.hidden=true;if(ultimo)ultimo.focus();}
+  document.querySelectorAll('[data-abre-pc]').forEach(function(b){b.addEventListener('click',abre);});
   document.getElementById('pc-fechar').addEventListener('click',fecha);
   sh.addEventListener('click',function(e){if(e.target===sh)fecha();});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!sh.hidden)fecha();});
