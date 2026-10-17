@@ -270,6 +270,14 @@ p{margin:0}
   .legenda .nota{margin-left:0}
   .caixa .btn{font-size:17px;padding-inline:16px}
 }
+.real{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:clamp(24px,4vw,56px);align-items:center;margin-top:clamp(40px,6vw,72px)}
+.real .yt{position:relative;aspect-ratio:9/16;width:100%;border:0;padding:0;border-radius:22px;overflow:hidden;cursor:pointer;background:#000;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.real .yt img{width:100%;height:100%;object-fit:cover;opacity:.85}
+.real .yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.real .play{position:absolute;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:var(--amber)}
+.real .play::after{content:"";position:absolute;left:30px;top:22px;border-style:solid;border-width:16px 0 16px 26px;border-color:transparent transparent transparent var(--ink)}
+.real h3{margin:0 0 10px}.real p{margin:0 0 22px;opacity:.85}
+@media (max-width:720px){.real{grid-template-columns:1fr}.real .yt{max-width:300px;margin-inline:auto}}
 </style>
 </head>
 <body>
@@ -399,6 +407,17 @@ p{margin:0}
         <li><h3>Coloque o que já existe</h3><p>Seus compromissos, tarefas, gastos e metas. Sem fórmula e sem montar planilha.</p></li>
         <li><h3>Abra e siga o dia</h3><p>Cada parte tem sua aba. O que atrasou fica em destaque até você resolver, e o saldo do mês está sempre à vista.</p></li>
       </ol>
+      <div class="real">
+        <button class="yt" type="button" data-yt="vr8mNo_Uw94" aria-label="Assistir ao vídeo da instalação do Prumo">
+          <img src="https://i.ytimg.com/vi/vr8mNo_Uw94/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">
+          <span class="play" aria-hidden="true"></span>
+        </button>
+        <div class="txt">
+          <h3>Veja a instalação de verdade</h3>
+          <p>30 segundos, gravado na tela de um PC com Windows: do instalador até o Prumo aberto, passando pelo aviso do Windows.</p>
+          <a class="btn comprar" href="https://pay.kiwify.com.br/cXeGGCF">Comprar o Prumo por R$ 19,95</a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -491,6 +510,7 @@ p{margin:0}
         <details open><summary>Como recebo o app depois de pagar?</summary><p>O pagamento é feito pela Kiwify. Assim que for aprovado (Pix e cartão costumam ser na hora), você recebe por e-mail o acesso ao instalador, com um passo a passo e um vídeo mostrando a instalação.</p></details>
         <details><summary>Estou no celular. Posso comprar mesmo assim?</summary><p>Pode. Você paga pelo celular e recebe por e-mail o acesso ao instalador. Depois é só abrir esse e-mail no PC com Windows e instalar.</p></details>
         <details><summary>Funciona no meu computador?</summary><p>Funciona em PC com Windows 10 ou 11. Não funciona em Mac, celular ou tablet.</p></details>
+        <details><summary>O Windows mostrou um aviso na instalação. É seguro?</summary><p>Sim. Esse aviso (SmartScreen) aparece em programas novos de desenvolvedores pequenos, que ainda não têm o certificado digital pago. Clique em "Mais informações" e depois em "Executar assim mesmo". O vídeo de instalação mostra esse passo.</p></details>
         <details><summary>Precisa de internet?</summary><p>Não para usar agenda, tarefas, gastos e metas. A internet só é usada para a previsão do tempo e as notícias, se você quiser vê-las.</p></details>
         <details><summary>Tem mensalidade ou cobrança depois?</summary><p>Não. São R$ 19,95 uma única vez. Sem renovação automática e sem plano premium escondido.</p></details>
         <details><summary>Onde ficam meus dados?</summary><p>No seu PC. Sem conta em servidor e sem nuvem. Os dados são criptografados (AES-256) e protegidos pela sua senha, com cópia de segurança diária no próprio computador.</p></details>
@@ -618,5 +638,6 @@ p{margin:0}
   });
 })();
 </script>
+<script>document.querySelectorAll('[data-yt]').forEach(b=>b.addEventListener('click',()=>{b.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+b.dataset.yt+'?autoplay=1&rel=0" title="Instalação do Prumo" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>'},{once:true}))</script>
 </body>
 </html>
